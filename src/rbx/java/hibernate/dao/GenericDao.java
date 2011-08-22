@@ -1,6 +1,6 @@
 /*!
  * @(#) Hibernate GenericDao v.1.0.1
- * https://github.com/diegoguevara/
+ * https://github.com/diegoguevara/HibernateGenericDao
  * 
  * Hibernate Generic DAO simple implemantation
  * 
