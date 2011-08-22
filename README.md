@@ -1,0 +1,3 @@
+## Hibernate GenericDao
+
+readme in development...
