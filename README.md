@@ -44,5 +44,30 @@ Add query criteria restrictions:
         GenericDao gdao = new GenericDao();
         result = gdao.retrieve( Object_Data.class.getName(), lscriterion );
         
+        
+
+### Native SQL Query
+
+This method allows you to run native SQL queries using Hibernate.
+
+        GenericDao gdao = new GenericDao();
+        
+        String sqlquery = "Select * from version";
+        
+        List result = gdao.sqlQuery(sqlquery);
+        
+Also, it allows to send parameters to query using NamedParameters and a Map object.
+
+        GenericDao gdao = new GenericDao();
+        
+        String sqlquery = "Select * from version where id = :param_data";
+        
+        Map params = new HashMap();
+        params.put("param_data", "4");
+        
+        List result = gdao.sqlQuery(sqlquery, params);
+        
+
+
 TODO: add order, projection session and others in documentation...
 ...
