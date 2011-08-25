@@ -43,7 +43,8 @@ Add query criteria restrictions:
         
         GenericDao gdao = new GenericDao();
         result = gdao.retrieve( Object_Data.class.getName(), lscriterion );
-        
+
+TODO: add order, projection session and others in documentation...
         
 
 ### Native SQL Query
@@ -69,5 +70,5 @@ Also, it allows to send parameters to query using NamedParameters and a Map obje
         
 
 
-TODO: add order, projection session and others in documentation...
+TODO : Add save, update, delete etc...
 ...
