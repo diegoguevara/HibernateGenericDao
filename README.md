@@ -21,10 +21,12 @@ Installation
 
 3. create and configure `hibernate.cfg.xml` file
 
-TODO: add hibernate.cfg.xml configuration example...
+TODO: add `hibernate.cfg.xml` configuration example...
 
 Usage
 -----
+
+### Retrieving data
 
 Easy way to get all rows from a database table in a List of hibernate mapped objects:
 
@@ -57,7 +59,7 @@ This method allows you to run native SQL queries using Hibernate.
         
         List result = gdao.sqlQuery(sqlquery);
         
-Also, it allows to send parameters to query using NamedParameters and a Map object.
+Also, it allows to send parameters using Named Parameters in a Map object.
 
         GenericDao gdao = new GenericDao();
         
@@ -70,5 +72,15 @@ Also, it allows to send parameters to query using NamedParameters and a Map obje
         
 
 
-TODO : Add save, update, delete etc...
+### Saving data
+
+        MappedObjectData objdata = new MappedObjectData();
+        objdata.setName("name");
+        objdata.setDescription("txt description");
+        
+        GenericDao gdao = new GenericDao();
+        gdao.save(objdata);
+
+
+TODO : Add save, update, delete etc... in documentation
 ...
