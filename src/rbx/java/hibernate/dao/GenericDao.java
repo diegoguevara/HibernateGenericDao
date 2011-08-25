@@ -1,5 +1,5 @@
 /*!
- * @(#) Hibernate GenericDao v.1.0.1
+ * @(#) Hibernate GenericDao v.1.0.2
  * https://github.com/diegoguevara/HibernateGenericDao
  * 
  * Hibernate Generic DAO simple implemantation
@@ -7,7 +7,9 @@
  * Copyright 2011, Diego Guevara - Ritbox Ltda.
  * Released under dual licensed under the MIT or GPL Version 2 licenses.
  *  
- * Creation Date: Jun.02.2010
+ * Creation Date: Jun.02.2011
+ * Modified Date: Ago.22.2011
+ * 
  */
 package rbx.java.hibernate.dao;
 
@@ -15,9 +17,11 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
@@ -394,7 +398,6 @@ public class GenericDao {
 
             String hql = String.format("delete from %s", objName_);
             session_.createQuery(hql).executeUpdate();
-            //session_.delete(objName_);
 
             if (!globaltx) {
                 tx.commit();
@@ -418,13 +421,15 @@ public class GenericDao {
     }
 
     /**
-     * Run a native sql query
+     * Run a Native SQL Query supporting NamedParameters
      * @param sql_      String with Native SQL Query
+     * @param params_   Map with Named Parameters for SQL Query
      * @param session_  Hibernate Session Object
      * @return List of Objects with query result
      * @throws DaoException 
+     * 
      */
-    public List sqlQuery(String sql_, Session session_) throws DaoException {
+    public List sqlQuery(String sql_, Map params_, Session session_) throws DaoException {
         Transaction tx = null;
         boolean globaltx = true;
         List result = null;
@@ -437,8 +442,13 @@ public class GenericDao {
                 globaltx = false;
             }
 
-            result = session_.createSQLQuery(sql_).list();
-
+            Query query = session_.createSQLQuery(sql_);
+            
+            if ( params_ != null)
+                query.setProperties(params_);
+            
+            result = query.list();
+            
             if (!globaltx) {
                 tx.commit();
             }
@@ -458,6 +468,38 @@ public class GenericDao {
             }
         }
         return result;
+    }
+    
+    /**
+     * Overwrite sqlQuery method
+     * @param sql_  String with Native SQL Query
+     * @return  List of Objects with query result
+     * @throws DaoException 
+     */
+    public List sqlQuery(String sql_) throws DaoException {
+        return sqlQuery(sql_,null, null);
+    }
+    
+    /**
+     * Overwrite sqlQuery method
+     * @param sql_      String with Native SQL Query
+     * @param session_  Hibernate Session Object
+     * @return          List of Objects with query result
+     * @throws DaoException 
+     */
+    public List sqlQuery(String sql_, Session session_) throws DaoException {
+        return sqlQuery(sql_,null, session_);
+    }
+    
+    /**
+     * Overwrite sqlQuery method
+     * @param sql_      String with Native SQL Query
+     * @param params_   Map with Named Parameters for SQL Query
+     * @return          List of Objects with query result
+     * @throws DaoException 
+     */
+    public List sqlQuery(String sql_, Map params_) throws DaoException {
+        return sqlQuery(sql_,params_,null);
     }
 
     /**
