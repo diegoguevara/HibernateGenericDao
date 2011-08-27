@@ -7,8 +7,8 @@
  * Copyright 2011, Diego Guevara - Ritbox Ltda.
  * Released under dual licensed under the MIT or GPL Version 2 licenses.
  *  
- * Creation Date: Jun.02.2011
- * Modified Date: Ago.22.2011
+ * Creation Date: Jun.2011
+ * Modified Date: Aug.2011
  * 
  */
 package rbx.java.hibernate.dao;
@@ -501,6 +501,90 @@ public class GenericDao {
     public List sqlQuery(String sql_, Map params_) throws DaoException {
         return sqlQuery(sql_,params_,null);
     }
+    
+    
+    /**
+     * Run HQL Queries
+     * @param hql_      HQL string
+     * @param params_   Map with named parameters
+     * @param session_  Hibernate session
+     * @return
+     * @throws DaoException 
+     */
+    public List hqlQuery(String hql_, Map params_, Session session_) throws DaoException {
+        Transaction tx = null;
+        boolean globaltx = true;
+        List result = null;
+        try {
+            if (session_ == null) {
+                session_ = this.startSession();
+            }
+            if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
+                tx = session_.beginTransaction();
+                globaltx = false;
+            }
+
+            Query query = session_.createQuery(hql_);
+            
+            if ( params_ != null)
+                query.setProperties(params_);
+            
+            result = query.list();
+            
+            if (!globaltx) {
+                tx.commit();
+            }
+
+        } catch (Exception e) {
+            logger.error("Error running hqlquery: " + stacktraceError(e));
+            throw new DaoException("Error running hqlquery: " + stacktraceError(e));
+        } finally {
+            if (!globaltx) {
+                if (session_ != null && session_.isOpen()) {
+                    if (tx != null && tx.isActive()) {
+                        session_.flush();
+                    }
+                    session_.close();
+                    session_ = null;
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * overwrite hqlQuery method to allow just with hql string
+     * @param hql_  HQL String
+     * @return      List of objects with result
+     * @throws DaoException 
+     */
+    public List hqlQuery(String hql_) throws DaoException {
+        return hqlQuery(hql_, null, null);
+    }
+    
+    /**
+     * overwrite hqlQuery method with hql string and session
+     * @param hql_      HQL String
+     * @param session_  Hibernate session
+     * @return          Listo of objects with result
+     * @throws DaoException 
+     */
+    public List hqlQuery(String hql_, Session session_) throws DaoException {
+        return hqlQuery(hql_, null, session_);
+    }
+    
+    /**
+     * overwrite hqlQuery method with hql string and Map parameters
+     * @param hql_      HQL String
+     * @param params_   Map with Named parameters
+     * @return          List of objects with result
+     * @throws DaoException 
+     */
+    public List hqlQuery(String hql_, Map params_) throws DaoException {
+        return hqlQuery(hql_, params_, null);
+    }
+    
+    
 
     /**
      * Call Hibernate helper session factory and opens a session
