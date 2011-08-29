@@ -1,5 +1,5 @@
 
 dist/HibernateGenericDao.jar
 *.class
-dist
-build
+dist/*
+build/*
