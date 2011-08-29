@@ -3,3 +3,4 @@ dist/HibernateGenericDao.jar
 *.class
 dist/*
 build/*
+.DS_Store
