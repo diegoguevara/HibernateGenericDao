@@ -21,7 +21,24 @@ Installation
 
 3. create and configure `hibernate.cfg.xml` file
 
-TODO: add `hibernate.cfg.xml` configuration example...
+ `hibernate.cfg.xml` example using MySql:
+ 
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        <hibernate-configuration>
+                <session-factory>
+                        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+                        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+                        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/documents</property>
+                        <property name="hibernate.connection.username">root</property>
+                        <property name="hibernate.connection.password">rootpass</property>
+                        
+                        <mapping resource="rbx/data/Version.hbm.xml"/>
+                        <mapping resource="rbx/data/Document.hbm.xml"/>
+                </session-factory>
+        </hibernate-configuration>
+ 
+ 
 
 Usage
 -----
