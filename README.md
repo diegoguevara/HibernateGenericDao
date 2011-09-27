@@ -38,7 +38,17 @@ Installation
                 </session-factory>
         </hibernate-configuration>
  
- 
+ 4. Create Mapping Hbm files and java classes
+
+Example based on configuration file:
+
+        Document.hbm.xml
+        Document.java
+        Version.hbm.xml
+        Version.java
+        
+Use Netbeans or another tool to generate the mapping files from database tables.
+
 
 Usage
 -----
@@ -56,14 +66,28 @@ Add query criteria restrictions:
 
         List<Object_Data> result;
         
-        List<Criterion> lscriterion;
-        lscriterion = new ArrayList<Criterion>();
+        List<Criterion> lscriterion = new ArrayList<Criterion>();
         lscriterion.add( Restrictions.isNull( "param" ) );
         
         GenericDao gdao = new GenericDao();
         result = gdao.retrieve( Object_Data.class.getName(), lscriterion );
+        
+Add Order in query results
 
-TODO: add order, projection session and others in documentation...
+        List<Object_Data> result;
+        
+        List<Criterion> lscriterion = new ArrayList<Criterion>();
+        lscriterion.add( Restrictions.isNull( "param" ) );
+        
+        List<Order> lorder = new ArrayList<>(Order);
+        List<Order> lorder = new ArrayList<Order>();
+        lorder.add(Order.asc("param")); // ascending Order with hb order object
+            
+        GenericDao gdao = new GenericDao();
+        result = gdao.retrieve( Object_Data.class.getName(), lscriterion, lorder ); // add criteria and order
+
+
+TODO: projection session and others in documentation...
         
 
 ### Native SQL Query
