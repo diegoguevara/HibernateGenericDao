@@ -2,7 +2,7 @@
  * @(#) DaoException
  * developed by: Diego A. Guevara C.
  */
-package rbx.java.hibernate.exception;
+package sncode.java.hibernate.exception;
 
 /**
  * Dao Exception class

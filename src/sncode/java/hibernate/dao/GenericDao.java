@@ -1,17 +1,17 @@
 /*!
- * @(#) Hibernate GenericDao v.1.0.2
+ * @(#) Hibernate GenericDao v2.0.0
  * https://github.com/diegoguevara/HibernateGenericDao
  * 
  * Hibernate Generic DAO simple implemantation
  * 
- * Copyright 2011, Diego Guevara - Ritbox Ltda.
+ * Copyright 2012, Diego Guevara
  * Released under dual licensed under the MIT or GPL Version 2 licenses.
  *  
  * Creation Date: Jun.2011
- * Modified Date: Aug.2011
+ * Modified Date: Mar.2012
  * 
  */
-package rbx.java.hibernate.dao;
+package sncode.java.hibernate.dao;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -29,8 +29,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
-import rbx.java.hibernate.exception.DaoException;
-import rbx.java.hibernate.helper.HibernateHelper;
+import sncode.java.hibernate.exception.DaoException;
+import sncode.java.hibernate.helper.HibernateHelper;
 
 /**
  * Hibernate Generic Dao simple implementation
@@ -153,13 +153,13 @@ public class GenericDao {
         return retrieve(objName_, criterias_, orderbys_, null, null, null, session_);
     }
 
-    public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, List<Projection> projections_) throws DaoException {
+    /*public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, List<Projection> projections_) throws DaoException {
         return retrieve(objName_, criterias_, orderbys_, null, null, projections_, null);
     }
 
     public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, List<Projection> projections_, Session session_) throws DaoException {
         return retrieve(objName_, criterias_, orderbys_, null, null, projections_, session_);
-    }
+    }*/
 
     /**
      * Find mapped data object by primary key
@@ -603,6 +603,7 @@ public class GenericDao {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
-        return "------\r\n" + sw.toString() + "------\r\n";
+        //return "------\r\n" + sw.toString() + "------\r\n";
+        return sw.toString();
     }
 }
