@@ -1,7 +1,18 @@
 Hibernate GenericDao
 ====================
 
-Hibernate Generic Dao implementation library. documentation is in development...
+Hibernate Generic Dao implementation library... 
+
+More info about Hibernate and how it work please read official documentation:
+
+http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/index.html
+
+
+Hibernate Quick Start Tutorial:
+
+http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/tutorial.html
+
+
 
 Requirements
 ------------
@@ -21,7 +32,8 @@ Installation
 
 3. create and configure `hibernate.cfg.xml` file
 
- `hibernate.cfg.xml` example using MySql:
+ `hibernate.cfg.xml` example using MySql:  
+ More info about configuration: ( http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/session-configuration.html )
  
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
