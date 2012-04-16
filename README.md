@@ -1,7 +1,7 @@
 Hibernate GenericDao
 ====================
 
-Hibernate Generic Dao implementation library. documentation is in development...
+Hibernate Generic Dao implementation library.
 
 Requirements
 ------------
@@ -16,8 +16,8 @@ Installation
 1. add HibernateGenericDao.jar into your project libraries.
 2. Import library GenericDao class.
 
-        import rbx.java.dao.hibernate.dao.GenericDao
-        import rbx.java.hibernate.exception.DaoException
+        import sncode.java.dao.hibernate.dao.GenericDao
+        import sncode.java.hibernate.exception.DaoException
 
 3. create and configure `hibernate.cfg.xml` file
 
@@ -32,13 +32,12 @@ Installation
                         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/documents</property>
                         <property name="hibernate.connection.username">root</property>
                         <property name="hibernate.connection.password">rootpass</property>
-                        
-                        <mapping resource="rbx/data/Version.hbm.xml"/>
-                        <mapping resource="rbx/data/Document.hbm.xml"/>
+                        <mapping resource="sncode/data/Version.hbm.xml"/>
+                        <mapping resource="sncode/data/Document.hbm.xml"/>
                 </session-factory>
         </hibernate-configuration>
  
- 4. Create Mapping Hbm files and java classes
+4. Create Mapping Hbm files and java classes
 
 Example based on configuration file:
 
@@ -52,6 +51,7 @@ Use Netbeans or another tool to generate the mapping files from database tables.
 
 Usage
 -----
+this is a resume of simple usage, more details in general documentation.
 
 ### Retrieving data
 
@@ -62,7 +62,7 @@ Easy way to get all rows from a database table in a List of hibernate mapped obj
         GenericDao gdao = new GenericDao();
         result = gdao.retrieve( Object_Data.class.getName() );
         
-Add query criteria restrictions:
+**Add query criteria restrictions**
 
         List<Object_Data> result;
         
@@ -72,22 +72,18 @@ Add query criteria restrictions:
         GenericDao gdao = new GenericDao();
         result = gdao.retrieve( Object_Data.class.getName(), lscriterion );
         
-Add Order in query results
+**Add Order in query results**
 
         List<Object_Data> result;
         
         List<Criterion> lscriterion = new ArrayList<Criterion>();
         lscriterion.add( Restrictions.isNull( "param" ) );
         
-        List<Order> lorder = new ArrayList<>(Order);
         List<Order> lorder = new ArrayList<Order>();
         lorder.add(Order.asc("param")); // ascending Order with hb order object
             
         GenericDao gdao = new GenericDao();
         result = gdao.retrieve( Object_Data.class.getName(), lscriterion, lorder ); // add criteria and order
-
-
-TODO: projection session and others in documentation...
         
 
 ### Native SQL Query
@@ -100,7 +96,7 @@ This method allows you to run native SQL queries using Hibernate.
         
         List result = gdao.sqlQuery(sqlquery);
         
-Also, it allows to send parameters using Named Parameters in a Map object.
+Also, allows to send parameters using Named Parameters in a Map object.
 
         GenericDao gdao = new GenericDao();
         
@@ -110,7 +106,29 @@ Also, it allows to send parameters using Named Parameters in a Map object.
         params.put("param_data", "4");
         
         List result = gdao.sqlQuery(sqlquery, params);
+
+
+### Hibernate HQL Query
+
+This method allows you to run hubernate HQL queries. [more about HQL](http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html)
+
+        GenericDao gdao = new GenericDao();
         
+        String hqlquery = "from version";
+        
+        List result = gdao.hqlQuery(hqlquery);
+        
+Also, allows to send parameters using Named Parameters in a Map object.
+
+        GenericDao gdao = new GenericDao();
+        
+        String hqlquery = "from version where id = :param_data";
+        
+        Map params = new HashMap();
+        params.put("param_data", "4");
+        
+        List result = gdao.hqlQuery(hqlquery, params);
+                        
 
 
 ### Saving data
@@ -123,5 +141,22 @@ Also, it allows to send parameters using Named Parameters in a Map object.
         gdao.save(objdata);
 
 
-TODO : Add save, update, delete etc... in documentation
-...
+### Update data
+
+        MappedObjectData objdata = new MappedObjectData();
+        objdata.setId(79);
+        objdata.setName("new name");
+        objdata.setDescription("new txt description");
+        
+        GenericDao gdao = new GenericDao();
+        gdao.update(objdata);
+
+### Delete data
+
+        MappedObjectData objdata = new MappedObjectData();
+        objdata.setId(79);
+                
+        GenericDao gdao = new GenericDao();
+        gdao.delete(objdata);
+
+### Find by primary key

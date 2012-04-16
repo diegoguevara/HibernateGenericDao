@@ -1,5 +1,5 @@
 /*!
- * @(#) Hibernate GenericDao v2.0.0
+ * @(#) Hibernate GenericDao v2.1.0
  * https://github.com/diegoguevara/HibernateGenericDao
  * 
  * Hibernate Generic DAO simple implemantation
@@ -8,7 +8,7 @@
  * Released under dual licensed under the MIT or GPL Version 2 licenses.
  *  
  * Creation Date: Jun.2011
- * Modified Date: Mar.2012
+ * Modified Date: Apr.2012
  * 
  */
 package sncode.java.hibernate.dao;
@@ -35,17 +35,26 @@ import sncode.java.hibernate.helper.HibernateHelper;
 /**
  * Hibernate Generic Dao simple implementation
  * @author Diego Guevara
- * @version 1.0.1
  */
 public class GenericDao {
 
     private static Logger logger = Logger.getLogger(GenericDao.class.getName());
+    
+    private String hbcfgFile = "hibernate.cfg.xml";
 
     /**
      * Constructor
      */
     public GenericDao() {
         super();
+    }
+    
+    /**
+     * Constructor
+     */
+    public GenericDao(String hibernateCfgFile) {
+        super();
+        this.hbcfgFile = hibernateCfgFile;
     }
 
     // retrieve section
@@ -591,7 +600,7 @@ public class GenericDao {
      * @return Hibernate Session
      */
     public Session startSession() {
-        return HibernateHelper.getSessionFactory().openSession();
+        return HibernateHelper.getSessionFactory(hbcfgFile).openSession();
     }
 
     /**
@@ -603,7 +612,6 @@ public class GenericDao {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
-        //return "------\r\n" + sw.toString() + "------\r\n";
         return sw.toString();
     }
 }
