@@ -1,4 +1,4 @@
-dist/HibernateGenericDao.jar
+
 *.class
 dist/*
 build/*
@@ -6,3 +6,18 @@ build/*
 dist/.DS_Store
 
 .DS_Store
+
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/source/HibernateGenericDao/build/
+/source/HibernateGenericDao/nbproject/private/

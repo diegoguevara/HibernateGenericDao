@@ -1,8 +1,11 @@
 /*!
- * @(#) DaoException
- * developed by: Diego A. Guevara C.
+ * @(#) DaoException.java
+ * 
+ * @author diegoguevara
  */
-package sncode.java.hibernate.exception;
+
+
+package co.eventt.java.hibernate.exception;
 
 /**
  * Dao Exception class

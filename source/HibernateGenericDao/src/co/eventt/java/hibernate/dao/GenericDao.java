@@ -1,24 +1,26 @@
 /*!
- * @(#) Hibernate GenericDao v2.1.0
+ * @(#) Hibernate GenericDao v3.0.0
  * https://github.com/diegoguevara/HibernateGenericDao
  * 
  * Hibernate Generic DAO simple implemantation
  * 
- * Copyright 2012, Diego Guevara
+ * Copyright 2015, Diego Guevara
  * Released under dual licensed under the MIT or GPL Version 2 licenses.
  *  
  * Creation Date: Jun.2011
- * Modified Date: Apr.2012
+ * Modified Date: Sep.2015
  * 
  */
-package sncode.java.hibernate.dao;
 
+package co.eventt.java.hibernate.dao;
+
+import co.eventt.java.hibernate.exception.DaoException;
+import co.eventt.java.hibernate.helper.HibernateUtil;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -29,34 +31,13 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
-import sncode.java.hibernate.exception.DaoException;
-import sncode.java.hibernate.helper.HibernateHelper;
 
 /**
- * Hibernate Generic Dao simple implementation
- * @author Diego Guevara
+ *
+ * @author diegoguevara
  */
 public class GenericDao {
-
-    private static Logger logger = Logger.getLogger(GenericDao.class.getName());
     
-    private String hbcfgFile = "hibernate.cfg.xml";
-
-    /**
-     * Constructor
-     */
-    public GenericDao() {
-        super();
-    }
-    
-    /**
-     * Constructor
-     */
-    public GenericDao(String hibernateCfgFile) {
-        super();
-        this.hbcfgFile = hibernateCfgFile;
-    }
-
     // retrieve section
     /**
      * retrieve database data with given parameters
@@ -70,13 +51,13 @@ public class GenericDao {
      * @return List of hbernate database mapped objects
      * @throws DaoException 
      */
-    public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, Integer first_, Integer max_, List<Projection> projections_, Session session_) throws DaoException {
+    public static List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, Integer first_, Integer max_, List<Projection> projections_, Session session_) throws DaoException {
         List data = null;
         Transaction tx = null;
         boolean globaltx = true;
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -102,7 +83,7 @@ public class GenericDao {
                 c.setProjection(pl);
             }
 
-            //add mas and first
+            //add max and first
             if (first_ != null) {
                 c.setFirstResult(first_);
             }
@@ -125,7 +106,7 @@ public class GenericDao {
             }
 
         } catch (Exception e) {
-            logger.error("Error loading data : " + stacktraceError(e));
+            //logger.error("Error loading data : " + stacktraceError(e));
             throw new DaoException("Error loading data: " + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -142,34 +123,27 @@ public class GenericDao {
         return data;
     }
 
-    public List retrieve(String objName_) throws DaoException {
+    public static List retrieve(String objName_) throws DaoException {
         return retrieve(objName_, null, null, null, null, null, null);
     }
 
-    public List retrieve(String objName_, List<Criterion> criterias_) throws DaoException {
+    public static List retrieve(String objName_, List<Criterion> criterias_) throws DaoException {
         return retrieve(objName_, criterias_, null, null, null, null, null);
     }
 
-    public List retrieve(String objName_, List<Criterion> criterias_, Session session_) throws DaoException {
+    public static List retrieve(String objName_, List<Criterion> criterias_, Session session_) throws DaoException {
         return retrieve(objName_, criterias_, null, null, null, null, session_);
     }
     
-    public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_) throws DaoException {
+    public static List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_) throws DaoException {
         return retrieve(objName_, criterias_, orderbys_, null, null, null, null);
     }
 
-    public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, Session session_) throws DaoException {
+    public static List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, Session session_) throws DaoException {
         return retrieve(objName_, criterias_, orderbys_, null, null, null, session_);
     }
-
-    /*public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, List<Projection> projections_) throws DaoException {
-        return retrieve(objName_, criterias_, orderbys_, null, null, projections_, null);
-    }
-
-    public List retrieve(String objName_, List<Criterion> criterias_, List<Order> orderbys_, List<Projection> projections_, Session session_) throws DaoException {
-        return retrieve(objName_, criterias_, orderbys_, null, null, projections_, session_);
-    }*/
-
+    
+    
     /**
      * Find mapped data object by primary key
      * @param id_       Serializable with mapped object od field
@@ -178,14 +152,14 @@ public class GenericDao {
      * @return          Mapped object with query result
      * @throws DaoException 
      */
-    public Object findByPK(Serializable id_, String objName_, Session session_) throws DaoException {
+    public static Object findByPK(Serializable id_, String objName_, Session session_) throws DaoException {
         Transaction tx = null;
         Object result = null;
         boolean globaltx = true;
 
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -198,7 +172,7 @@ public class GenericDao {
                 tx.commit();
             }
         } catch (Exception e) {
-            logger.error("Error retriving by PK: " + stacktraceError(e));
+            //logger.error("Error retriving by PK: " + stacktraceError(e));
             throw new DaoException("Error retriving by PK: " + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -223,7 +197,7 @@ public class GenericDao {
      * @throws DaoException
      * @see findByPK
      */
-    public Object findByPK(Serializable id_, String objName_) throws DaoException {
+    public static Object findByPK(Serializable id_, String objName_) throws DaoException {
         return findByPK(id_, objName_, null);
     }
 
@@ -234,14 +208,14 @@ public class GenericDao {
      * @return          Saved object
      * @throws DaoException 
      */
-    public Object save(Object data_, Session session_) throws DaoException {
+    public static Object save(Object data_, Session session_) throws DaoException {
         Transaction tx = null;
         Object result = null;
         boolean globaltx = true;
 
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -254,7 +228,7 @@ public class GenericDao {
                 tx.commit();
             }
         } catch (Exception e) {
-            logger.error("Error saving data : " + stacktraceError(e));
+            //logger.error("Error saving data : " + stacktraceError(e));
             throw new DaoException("Error saving data" + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -277,7 +251,7 @@ public class GenericDao {
      * @return      Saved object
      * @throws DaoException 
      */
-    public Object save(Object data_) throws DaoException {
+    public static Object save(Object data_) throws DaoException {
         return save(data_, null);
     }
 
@@ -288,14 +262,14 @@ public class GenericDao {
      * @return          updated mapped object
      * @throws DaoException 
      */
-    public Object update(Object data_, Session session_) throws DaoException {
+    public static Object update(Object data_, Session session_) throws DaoException {
         Transaction tx = null;
         Object result = null;
         boolean globaltx = true;
 
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -310,7 +284,8 @@ public class GenericDao {
                 tx.commit();
             }
         } catch (Exception e) {
-            logger.error("Error updating data : " + stacktraceError(e));
+            tx.rollback();
+            //logger.error("Error updating data : " + stacktraceError(e));
             throw new DaoException("Error updating data" + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -333,7 +308,7 @@ public class GenericDao {
      * @return
      * @throws DaoException 
      */
-    public Object update(Object data_) throws DaoException {
+    public static Object update(Object data_) throws DaoException {
         return update(data_, null);
     }
 
@@ -343,13 +318,13 @@ public class GenericDao {
      * @param session_  Hibernate session object
      * @throws DaoException 
      */
-    public void delete(Object data_, Session session_) throws DaoException {
+    public static void delete(Object data_, Session session_) throws DaoException {
         Transaction tx = null;
         boolean globaltx = true;
 
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -362,7 +337,7 @@ public class GenericDao {
                 tx.commit();
             }
         } catch (Exception e) {
-            logger.error("Error deleting data: " + stacktraceError(e));
+            //logger.error("Error deleting data: " + stacktraceError(e));
             throw new DaoException("Error deleting data: " + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -382,7 +357,7 @@ public class GenericDao {
      * @param data_ Mapped object with delete criterias
      * @throws DaoException 
      */
-    public void delete(Object data_) throws DaoException {
+    public static void delete(Object data_) throws DaoException {
         delete(data_, null);
     }
 
@@ -393,12 +368,12 @@ public class GenericDao {
      * @return true if truncate is correct
      * @throws DaoException 
      */
-    public boolean truncate(String objName_, Session session_) throws DaoException {
+    public static boolean truncate(String objName_, Session session_) throws DaoException {
         Transaction tx = null;
         boolean globaltx = true;
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -413,7 +388,7 @@ public class GenericDao {
             }
 
         } catch (Exception e) {
-            logger.error("Error deleting data with hql: " + stacktraceError(e));
+            //logger.error("Error deleting data with hql: " + stacktraceError(e));
             throw new DaoException("Error deleting data with hql: " + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -438,13 +413,13 @@ public class GenericDao {
      * @throws DaoException 
      * 
      */
-    public List sqlQuery(String sql_, Map params_, Session session_) throws DaoException {
+    public static List sqlQuery(String sql_, Map params_, Session session_) throws DaoException {
         Transaction tx = null;
         boolean globaltx = true;
         List result = null;
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -463,7 +438,7 @@ public class GenericDao {
             }
 
         } catch (Exception e) {
-            logger.error("Error running sqlquery: " + stacktraceError(e));
+            //logger.error("Error running sqlquery: " + stacktraceError(e));
             throw new DaoException("Error running sqlquery: " + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -485,7 +460,7 @@ public class GenericDao {
      * @return  List of Objects with query result
      * @throws DaoException 
      */
-    public List sqlQuery(String sql_) throws DaoException {
+    public static List sqlQuery(String sql_) throws DaoException {
         return sqlQuery(sql_,null, null);
     }
     
@@ -496,7 +471,7 @@ public class GenericDao {
      * @return          List of Objects with query result
      * @throws DaoException 
      */
-    public List sqlQuery(String sql_, Session session_) throws DaoException {
+    public static List sqlQuery(String sql_, Session session_) throws DaoException {
         return sqlQuery(sql_,null, session_);
     }
     
@@ -507,7 +482,7 @@ public class GenericDao {
      * @return          List of Objects with query result
      * @throws DaoException 
      */
-    public List sqlQuery(String sql_, Map params_) throws DaoException {
+    public static List sqlQuery(String sql_, Map params_) throws DaoException {
         return sqlQuery(sql_,params_,null);
     }
     
@@ -520,13 +495,13 @@ public class GenericDao {
      * @return
      * @throws DaoException 
      */
-    public List hqlQuery(String hql_, Map params_, Session session_) throws DaoException {
+    public static List hqlQuery(String hql_, Map params_, Session session_) throws DaoException {
         Transaction tx = null;
         boolean globaltx = true;
         List result = null;
         try {
             if (session_ == null) {
-                session_ = this.startSession();
+                session_ = startSession();
             }
             if (session_.getTransaction() == null || !session_.getTransaction().isActive()) {
                 tx = session_.beginTransaction();
@@ -545,7 +520,7 @@ public class GenericDao {
             }
 
         } catch (Exception e) {
-            logger.error("Error running hqlquery: " + stacktraceError(e));
+            //logger.error("Error running hqlquery: " + stacktraceError(e));
             throw new DaoException("Error running hqlquery: " + stacktraceError(e));
         } finally {
             if (!globaltx) {
@@ -567,7 +542,7 @@ public class GenericDao {
      * @return      List of objects with result
      * @throws DaoException 
      */
-    public List hqlQuery(String hql_) throws DaoException {
+    public static List hqlQuery(String hql_) throws DaoException {
         return hqlQuery(hql_, null, null);
     }
     
@@ -578,7 +553,7 @@ public class GenericDao {
      * @return          Listo of objects with result
      * @throws DaoException 
      */
-    public List hqlQuery(String hql_, Session session_) throws DaoException {
+    public static List hqlQuery(String hql_, Session session_) throws DaoException {
         return hqlQuery(hql_, null, session_);
     }
     
@@ -589,18 +564,17 @@ public class GenericDao {
      * @return          List of objects with result
      * @throws DaoException 
      */
-    public List hqlQuery(String hql_, Map params_) throws DaoException {
+    public static List hqlQuery(String hql_, Map params_) throws DaoException {
         return hqlQuery(hql_, params_, null);
     }
     
     
-
     /**
      * Call Hibernate helper session factory and opens a session
      * @return Hibernate Session
      */
-    public Session startSession() {
-        return HibernateHelper.getSessionFactory(hbcfgFile).openSession();
+    public static Session startSession() {
+        return HibernateUtil.getSessionFactory().openSession();
     }
 
     /**
@@ -608,7 +582,7 @@ public class GenericDao {
      * @param e Exception object
      * @return String
      */
-    private String stacktraceError(Exception e) {
+    private static String stacktraceError(Exception e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);

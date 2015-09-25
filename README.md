@@ -1,12 +1,14 @@
-Hibernate GenericDao
+Hibernate GenericDao 3.0.0
 ====================
 
 Hibernate Generic Dao implementation library.
 
+documentation in progress... 
+
 Requirements
 ------------
 
-1. Hibernate 3.x ( http://www.hibernate.org/ )
+1. Hibernate 4.x ( http://www.hibernate.org/ )
 2. Log4j 1.2.x   ( http://logging.apache.org/log4j/1.2/ )
 
 
@@ -16,8 +18,8 @@ Installation
 1. add HibernateGenericDao.jar into your project libraries.
 2. Import library GenericDao class.
 
-        import sncode.java.dao.hibernate.dao.GenericDao
-        import sncode.java.hibernate.exception.DaoException
+        import co.eventt.java.hibernate.dao.GenericDao
+        import co.eventt.java.hibernate.exception.DaoException
 
 3. create and configure `hibernate.cfg.xml` file
 
