@@ -61,8 +61,7 @@ Easy way to get all rows from a database table in a List of hibernate mapped obj
 
         List<Object_Data> result;
         
-        GenericDao gdao = new GenericDao();
-        result = gdao.retrieve( Object_Data.class.getName() );
+        result = GenericDao.retrieve( Object_Data.class.getName() );
         
 **Add query criteria restrictions**
 
@@ -71,8 +70,7 @@ Easy way to get all rows from a database table in a List of hibernate mapped obj
         List<Criterion> lscriterion = new ArrayList<Criterion>();
         lscriterion.add( Restrictions.isNull( "param" ) );
         
-        GenericDao gdao = new GenericDao();
-        result = gdao.retrieve( Object_Data.class.getName(), lscriterion );
+        result = GenericDao.retrieve( Object_Data.class.getName(), lscriterion );
         
 **Add Order in query results**
 
@@ -84,52 +82,50 @@ Easy way to get all rows from a database table in a List of hibernate mapped obj
         List<Order> lorder = new ArrayList<Order>();
         lorder.add(Order.asc("param")); // ascending Order with hb order object
             
-        GenericDao gdao = new GenericDao();
-        result = gdao.retrieve( Object_Data.class.getName(), lscriterion, lorder ); // add criteria and order
+        result = GenericDao.retrieve( Object_Data.class.getName(), lscriterion, lorder ); // add criteria and order
         
 
 ### Native SQL Query
 
 This method allows you to run native SQL queries using Hibernate.
 
-        GenericDao gdao = new GenericDao();
-        
+                
         String sqlquery = "Select * from version";
         
-        List result = gdao.sqlQuery(sqlquery);
+        List result = GenericDao.sqlQuery(sqlquery);
         
 Also, allows to send parameters using Named Parameters in a Map object.
 
-        GenericDao gdao = new GenericDao();
+        
         
         String sqlquery = "Select * from version where id = :param_data";
         
         Map params = new HashMap();
         params.put("param_data", "4");
         
-        List result = gdao.sqlQuery(sqlquery, params);
+        List result = GenericDao.sqlQuery(sqlquery, params);
 
 
 ### Hibernate HQL Query
 
 This method allows you to run hubernate HQL queries. [more about HQL](http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html)
 
-        GenericDao gdao = new GenericDao();
+        
         
         String hqlquery = "from version";
         
-        List result = gdao.hqlQuery(hqlquery);
+        List result = GenericDao.hqlQuery(hqlquery);
         
 Also, allows to send parameters using Named Parameters in a Map object.
 
-        GenericDao gdao = new GenericDao();
+        
         
         String hqlquery = "from version where id = :param_data";
         
         Map params = new HashMap();
         params.put("param_data", "4");
         
-        List result = gdao.hqlQuery(hqlquery, params);
+        List result = GenericDao.hqlQuery(hqlquery, params);
                         
 
 
@@ -139,8 +135,7 @@ Also, allows to send parameters using Named Parameters in a Map object.
         objdata.setName("name");
         objdata.setDescription("txt description");
         
-        GenericDao gdao = new GenericDao();
-        gdao.save(objdata);
+        GenericDao.save(objdata);
 
 
 ### Update data
@@ -150,15 +145,16 @@ Also, allows to send parameters using Named Parameters in a Map object.
         objdata.setName("new name");
         objdata.setDescription("new txt description");
         
-        GenericDao gdao = new GenericDao();
-        gdao.update(objdata);
+        GenericDao.update(objdata);
 
 ### Delete data
 
         MappedObjectData objdata = new MappedObjectData();
         objdata.setId(79);
-                
-        GenericDao gdao = new GenericDao();
-        gdao.delete(objdata);
+        
+        GenericDao.delete(objdata);
 
 ### Find by primary key
+
+
+// TODO:
