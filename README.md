@@ -108,7 +108,7 @@ Also, allows to send parameters using Named Parameters in a Map object.
 
 ### Hibernate HQL Query
 
-This method allows you to run hubernate HQL queries. [more about HQL](http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html)
+This method allows you to run hibernate HQL queries. [more about HQL](http://docs.jboss.org/hibernate/orm/3.3/reference/en/html/queryhql.html)
 
         
         
